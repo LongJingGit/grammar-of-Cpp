@@ -1,6 +1,15 @@
 # grammar-of-c-plus-plus
 C/C++语言法
 
+<!-- TOC -->
+
+- [grammar-of-c-plus-plus](#grammar-of-c-plus-plus)
+  - [版本管理](#版本管理)
+    - [主线合并分支](#主线合并分支)
+    - [分支合并主线](#分支合并主线)
+
+<!-- /TOC -->
+
 ## 版本管理
 两台客户机均在分支上进行开发
 ```vim
@@ -45,7 +54,7 @@ git branch -d <branchnames>
 git pull
 ```
 
-### 主线合并到分支
+### 主线合并分支
 进入分支，更新分支代码
 ```cpp
 [main]:   git checkout <branchname>       // 进入分支
