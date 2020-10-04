@@ -44,3 +44,57 @@ git branch -d <branchnames>
 ```vim
 git pull
 ```
+
+### 主线合并到分支
+进入分支，更新分支代码
+```cpp
+[main]:   git checkout <branchname>       // 进入分支
+[branch]: git pull                        // 更新分支代码
+```
+
+切换到主线
+```cpp
+[branch]: git checkout main
+```
+
+在主线上合并分支
+```cpp
+[main]: git merge <branchname>
+```
+
+提交合并后的代码
+```cpp
+[main]: git commit -m "提交信息"
+```
+
+将提交推送到远程主线
+```cpp
+[main]: git push origin main
+```
+
+### 分支合并主线
+进入主线，更新主线代码
+```cpp
+[main]: git pull
+```
+
+切换分支
+```cpp
+[main]: git checkout <branchname>
+```
+
+在分支上合并主线
+```cpp
+[branch]: git merge main
+```
+
+提交合并后的代码
+```cpp
+[branch]: git commit -m "提交信息"
+```
+
+将提交推送到远端
+```cpp
+[branch]: git push origin <branchname>
+```
+
