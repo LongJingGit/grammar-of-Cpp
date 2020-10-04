@@ -1,14 +1,21 @@
-# grammar-of-c-plus-plus
-C/C++语言法
+# grammar-of-Cpp
 
 <!-- TOC -->
 
-- [grammar-of-c-plus-plus](#grammar-of-c-plus-plus)
+- [grammar-of-Cpp](#grammar-of-cpp)
+  - [索引](#索引)
   - [版本管理](#版本管理)
     - [主线合并分支](#主线合并分支)
     - [分支合并主线](#分支合并主线)
 
 <!-- /TOC -->
+
+## 索引
+* [仿函数](https://github.com/JINGLONGGIT/grammar-of-c-plus-plus/blob/main/%E4%BB%BF%E5%87%BD%E6%95%B0.md)  
+* [`offsetof`]()  
+* [柔性数组]()  
+* [静态断言 `static_assert`]()  
+* [`typename` 关键字]()  
 
 ## 版本管理
 两台客户机均在分支上进行开发
