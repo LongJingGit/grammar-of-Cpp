@@ -7,6 +7,7 @@
   - [版本管理](#版本管理)
     - [主线合并分支](#主线合并分支)
     - [分支合并主线](#分支合并主线)
+    - [管理本地分支与远程分支](#管理本地分支与远程分支)
 
 <!-- /TOC -->
 
@@ -28,9 +29,14 @@ git checkout -b <branchname>    // 新建名字为<branchname>的分支，病切
 git checkout <branchname>
 ```
 
-查看分支
+查看本地所有分支
 ```vim
 git branch
+```
+
+查看本地和远程所有分支
+```cpp
+git branch -a
 ```
 
 提交到远程分支
@@ -114,3 +120,43 @@ git pull
 [branch]: git push origin <branchname>
 ```
 
+### 管理本地分支与远程分支
+查看本地所有分支
+```cpp
+git branch
+```
+
+查看本地和远程所有分支
+```cpp
+git branch -a
+```
+
+删除本地分支
+```cpp
+git branch -d <branchname>
+```
+
+删除远程分支
+```cpp
+git push origin --delete <branchname>
+```
+
+获取远程的所有分支
+```cpp
+git clone       // 只能clone远程的main分支，无法clone其他分支
+```
+
+获取远程的所有分支
+```cpp
+git clone           // 先git整个项目，此时只有main主线
+
+git branch -a       // 查看远程的所有分支
+
+// 假设远程分支内容如下
+remotes/origin/HEAD -> origin/main
+remotes/origin/functor
+remotes/origin/main
+
+// checkout远程的functor分支，在本地起名为funcotr分支，并切换到本地functor分支
+git checkout -b functor origin/functor   
+```
