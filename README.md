@@ -131,6 +131,11 @@ git branch
 git branch -a
 ```
 
+只查看远程的分支
+```cpp
+git branch -r
+```
+
 删除本地分支
 ```cpp
 git branch -d <branchname>
@@ -159,4 +164,11 @@ remotes/origin/main
 
 // checkout远程的functor分支，在本地起名为funcotr分支，并切换到本地functor分支
 git checkout -b functor origin/functor   
+```
+
+git已经删除了远程分支，但是在本地使用 `git branch -a` 仍然可以看到的解决方案
+```cpp
+git remote show origin    // 查看remote地址，远程分支，还有本地分支与之相对应关系等信息
+
+git remote prune origin   // 在本地删除远程不存在的分支
 ```
