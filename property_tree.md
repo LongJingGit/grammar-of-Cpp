@@ -5,14 +5,14 @@
 - [boost::property_tree::ptree](#boostproperty_treeptree)
   - [参考链接](#参考链接)
   - [property_tree::ptree 接口说明](#property_treeptree-接口说明)
-    - [`get<T>(path)`](#gettpath)
-    - [`get_optional<T>(path)`](#get_optionaltpath)
-    - [`get_child(path)`](#get_childpath)
-    - [`get_child_optional(path)`](#get_child_optionalpath)
-    - [`get_value<T>(path)`](#get_valuetpath)
-    - [`bool empty()`](#bool-empty)
-    - [`assoc_iterator find(const key_type &key)`](#assoc_iterator-findconst-key_type-key)
-    - [`size_type count(const key_type &key)`](#size_type-countconst-key_type-key)
+    - [get<T>(path)](#gettpath)
+    - [get_optional<T>(path)](#get_optionaltpath)
+    - [get_child(path)](#get_childpath)
+    - [get_child_optional(path)](#get_child_optionalpath)
+    - [get_value<T>(path)](#get_valuetpath)
+    - [bool empty()](#bool-empty)
+    - [assoc_iterator find(const key_type &key)](#assoc_iterator-findconst-key_type-key)
+    - [size_type count(const key_type &key)](#size_type-countconst-key_type-key)
   - [读写 XML 文件](#读写-xml-文件)
     - [XML文件示例](#xml文件示例)
     - [XML文档结构说明](#xml文档结构说明)
@@ -30,9 +30,10 @@
 * [boost-使用property_tree来解析xml、json](https://www.cnblogs.com/milanleon/p/7422858.html)
 * [BOOST之property_tree 及解析XML详解](https://blog.csdn.net/stelalala/article/details/8967812)
 * [C++ Boost JSON解析库的使用与坑](https://www.colabug.com/2018/0622/3274456/)
+* [Boost.PropertyTree](https://www.boost.org/doc/libs/1_74_0/doc/html/property_tree.html)
 
 ## property_tree::ptree 接口说明
-### `get<T>(path)`
+### get<T>(path)
 获取节点 `path` 的属性值。这个函数相当于先执行 `get_child()` ，得到想要的节点，然后再执行 `get_value<T>()`。
 比如 `ptree.get("a.b")` 等价于 `ptree.get_child("a.b").get_value()`  
 
@@ -40,25 +41,25 @@
 
 如果 `path` 不存在，直接抛出异常
 
-### `get_optional<T>(path)`
+### get_optional<T>(path)
 获取节点 `path` 的属性值。如果 `path` 不存在，不会抛出异常，由用户代码判断异常情况
 
-### `get_child(path)`
+### get_child(path)
 获取节点 `path` 下的所有子节点（包括属性、注释、数据）。如果路径不存在，直接抛出异常
 
-### `get_child_optional(path)`
+### get_child_optional(path)
 获取 `path` 节点下的所有子节点。如果路径不存在，不抛出异常
 
-### `get_value<T>(path)` 
+### get_value<T>(path)
 获取节点 `path` 的值，并转换成期望的数据类型 `T`。如果不希望有任何转换，也可以使用 `data()` 
 
-### `bool empty()`
+### bool empty()
 返回该节点是否含有子节点。比如当一个节点已经是叶子节点的时候，可以用这个函数来判断
 
-### `assoc_iterator find(const key_type &key)`
+### assoc_iterator find(const key_type &key)
 给定一个名字路径，返回指向该节点的迭代器或者 boost::property_tree::ptree::not_found
 
-### `size_type count(const key_type &key)`
+### size_type count(const key_type &key)
 返回指定名称路径的节点的子节点的数目
 
 ## 读写 XML 文件
@@ -88,7 +89,7 @@
 ### XML文档结构说明
 对于该 XML 文档来说，`config` 是根节点，下面有一个 `file` 子节点，该 `file` 节点的内容有：
 * 两个属性子节点（title/size）：用get获取属性值
-* 两个注释子节点（File First Commnet/File Second Comment）：用get_value或者data获取注释内容
+* 两个注释子节点（File First Commnet/File Second Comment）：用 `get_value` 或者 `data` 获取注释内容
 * 两个数据子节点（两个path）。包含属性节点、注释节点和具体的数据节点
 
 XML中节点分为属性节点、注释节点、数据节点
