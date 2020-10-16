@@ -1,8 +1,8 @@
-# C++ 中的 new opetator、operator new 和 placement new
+# C++ 中内存操作运算符
 
 <!-- TOC -->
 
-- [C++ 中的 new opetator、operator new 和 placement new](#c-中的-new-opetatoroperator-new-和-placement-new)
+- [C++ 中内存操作运算符](#c-中内存操作运算符)
   - [new operator](#new-operator)
   - [operator new](#operator-new)
   - [placement new](#placement-new)
@@ -11,7 +11,8 @@
     - [用 `placement new` 解决 `buffer` 的问题](#用-placement-new-解决-buffer-的问题)
     - [增大时空效率的问题](#增大时空效率的问题)
   - [placement new 的使用步骤](#placement-new-的使用步骤)
-  - [参考链接](#参考链接)
+  - [placement delete](#placement-delete)
+- [参考链接](#参考链接)
 
 <!-- /TOC -->
 
@@ -288,11 +289,162 @@ int main() {
     ```cpp
     delete[] buff;
     ```
-
 > 跳过任何步骤就可能导致运行时间的崩溃，内存泄露，以及其它的意想不到的情况。如果你确实需要使用 `placement new`，请认真遵循以上的步骤
 
-## 参考链接
+## delete operator
+和 `new operator` 关键字一样， `delete operator` 是 C++ 保留关键词，是操作符，无法重载，无法改变其含义。
+
+调用 `delete operator` 释放对象时完成了两项工作：
+* 调用对象的析构函数
+* 调用 `operator delete()` 函数释放内存空间
+
+比如我们按照如下方式调用 `delete`
+
+```cpp
+string* sp = new string(“hello world”);
+delete sp;
+```
+
+等价于
+
+```cpp
+ps->~string();          // 用于清理内存数据，对应placement new()
+operator delete(ps);    // 释放内存空间，对应于operator new()
+```
+
+## placement delete 
+`placement new()` 是 `operator new()` 附带额外参数的重载版本，对应的，`placement delete()` 即 `operator delete()` 的重载版本。
+
+默认实现版本如下：
+
+```cpp
+void operator delete  (void*, void*) noexcept { }
+```
+
+默认 `placement delete()` 的额外参数是 `void*`，为空实现，什么也不做。当然，我们可以定义其它附带类型的重载版本
+
+使用默认版本 `placement new()` 与重载 `placement delete()` 来演示定位构造对象和析构对象
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class A
+{
+private:
+    int num;
+public:
+    A() {
+        cout << "A's constructor" << endl;
+    }
+
+    ~A() {
+        cout << "A's destructor" << endl;
+    }
+
+    void show() {
+        cout << "num:" << num << endl;
+    }
+
+    // 自定义 placement delete()
+    static void operator delete(void* a, void* b) {
+        A*  pA = (A*)a;
+        pA->~A();
+    }
+};
+
+int main() {
+    char mem[100];
+    mem[0] = 'A';
+    mem[1] = '\0';
+    mem[2] = '\0';
+    mem[3] = '\0';
+    cout << (void*)mem << endl;
+    A* p = new (mem) A;                 // 调用placement new()，间接调用类A的构造函数，构造类A对象
+    cout << p << endl;
+    p->show();
+    A::operator delete(p,(void*)NULL);  // 调用placement delete(),间接调用类A的析构函数，释放类A对象
+}
+```
+
+程序运行结果如下：
+
+```
+000000000014F8E0
+A's constructor
+000000000014F8E0
+num:65
+A's destructor
+```
+
+需要说明的是：
+1. C++ 标准中默认版本的 `placement delete()` 为空实现，不调用类型对象析构函数
+2. C++ 中 `placement delete()` 的调用没有像 `placement new()` 的调用有单独的语法格式（`placement new expression`），需要以函数调用的书写格式来调用
+3. 上面对 `placement delete()` 的重载只是实现了调用类对象析构函数的功能，实际通过类对象直接调用析构函数即可，<font color=red>那 placement delete() 存在的意义是什么呢？</font>   
+    
+    对于自定义的 `placement new`，运行期系统将会寻找参数个数和类型都与 `operator new` 相同的某个 `operator delete` 来进行善后工作。  
+    
+    因此，对于一个带有额外参数的 `operator new` 没有带有相同额外参数的对应版本 `operator delete`，那么 `new` 的内存分配动作需要取消来恢复原状的时候，就不会有任何的 `operator delete` 被调用。  
+    
+    也就是说，当调用 `placement new()` 构建对象时，如果在构造函数中抛出异常，C++ 只能调用相应的 `placement delete()` 释放由 `placement new()` 获取的内存资源，否则就会有**内存泄露**。
+
+代码示例如下：
+
+```cpp
+#include <iostream>
+using namespace std;
+
+struct A {};    // 临时中间对象
+struct E {};    // 异常对象
+
+class T 
+{
+public:
+    T() { 
+        std::cout << "T's constructor" << endl;
+        throw E(); 
+    }
+};
+
+// placement new
+void* operator new (std::size_t, const A& a) {
+    std::cout << "Placement new called." << std::endl;
+    return (void*)&a;
+}
+
+// placement delete
+void operator delete (void *, const A &) {
+    std::cout << "Placement delete called." << std::endl;
+}
+
+int main() {
+    A a;
+    try 
+    {
+        T* p = new(a) T;
+    }
+    catch (E exp)
+    { 
+        std::cout << "Exception caught." << std::endl;
+    }
+    return 0;
+}
+```
+
+程序输出结果：
+
+```
+Placement new called.
+T's constructor
+Placement delete called.
+Exception caught.
+```
+
+当在 `class T` 构造函数中抛出异常时，对应版本的 `placement delete()` 将被调用。
+
+# 参考链接
 * [C++ new 的三种面貌](https://blog.csdn.net/K346K346/article/details/45489913)
 * [C++中的new、operator new与placement new](https://www.cnblogs.com/luxiaoxun/archive/2012/08/10/2631812.html)
 * [C++ delete的三种面貌](https://blog.csdn.net/k346k346/article/details/49514063)
 * [C++中使用placement new](https://blog.csdn.net/caoshangpa/article/details/78876443?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param)
+* [《Effective C++》 条款52]()
