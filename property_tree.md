@@ -1,29 +1,5 @@
 # boost::property_tree::ptree
 
-<!-- TOC -->
-
-- [boost::property_tree::ptree](#boostproperty_treeptree)
-  - [参考链接](#参考链接)
-  - [property_tree::ptree 接口说明](#property_treeptree-接口说明)
-    - [get<T>(path)](#gettpath)
-    - [get_optional<T>(path)](#get_optionaltpath)
-    - [get_child(path)](#get_childpath)
-    - [get_child_optional(path)](#get_child_optionalpath)
-    - [get_value<T>(path)](#get_valuetpath)
-    - [bool empty()](#bool-empty)
-    - [assoc_iterator find(const key_type &key)](#assoc_iterator-findconst-key_type-key)
-    - [size_type count(const key_type &key)](#size_type-countconst-key_type-key)
-  - [读写 XML 文件](#读写-xml-文件)
-    - [XML文件示例](#xml文件示例)
-    - [XML文档结构说明](#xml文档结构说明)
-    - [代码示例](#代码示例)
-  - [读写 JSON 文件](#读写-json-文件)
-    - [JOSN 文件格式说明](#josn-文件格式说明)
-    - [JSON文件示例](#json文件示例)
-    - [代码示例](#代码示例-1)
-
-<!-- /TOC -->
-
 ## 参考链接
 * [boost.property_tree解析xml的帮助类以及中文解析问题的解决](https://www.cnblogs.com/qicosmos/p/3555668.html)
 * [Boost.PropertyTree 在属性树里怎么访问数据](https://www.cnblogs.com/xujintao/p/8325941.html)

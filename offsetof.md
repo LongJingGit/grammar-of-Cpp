@@ -30,20 +30,20 @@ struct address {
    char street[50];
    int phone;
 };
-   
+
 int main()
 {
    printf("address 结构中的 name 偏移 = %d 字节。\n",
    offsetof(struct address, name));
-   
+
    printf("address 结构中的 street 偏移 = %d 字节。\n",
    offsetof(struct address, street));
-   
+
    printf("address 结构中的 phone 偏移 = %d 字节。\n",
    offsetof(struct address, phone));
 
    return(0);
-} 
+}
 ```
 
 让我们编译并运行上面的程序，这将产生以下结果：
@@ -63,10 +63,10 @@ struct ListNode
     char data[];
 };
 
-offsetof(ListNode, data);       // 结构体成员data相对于结构体开头的偏移量 =8
+offsetof(ListNode, data);       // 结构体成员 data 相对于结构体开头的偏移量 =8
 ```
 
 ```cpp
 ListNode* node = (ListNode*)(data - offsetof(ListNode, data));
-// data的地址减去data相对于结构体开头的偏移量，即可以得到结构体的地址
+// data 的地址减去 data 相对于结构体开头的偏移量，即可以得到结构体的地址
 ```
