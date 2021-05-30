@@ -1,17 +1,7 @@
 # C++11 std::enable_if 和 SFINAE
 
-<!-- TOC -->
-
-- [C++11 std::enable_if 和 SFINAE](#c11-stdenable_if-和-sfinae)
-  - [enable_if 和 SFINAE 是什么意思](#enable_if-和-sfinae-是什么意思)
-  - [代码示例一](#代码示例一)
-  - [代码示例二：](#代码示例二)
-  - [代码示例三](#代码示例三)
-  - [参考链接](#参考链接)
-
-<!-- /TOC -->
-
 ## enable_if 和 SFINAE 是什么意思
+
 SFINAE : substitution failure is not an error 替代失败不是错误。  
 当调用模板函数时编译器会根据传入的参数推导最合适的模板函数，在这个推导过程中如果某一个或者几个模板函数推导出来的结果是无法编译通过的，但是只要有一个可以正确推导出来，那么那几个推导的可能产生编译错误的模板函数并不会引发编译错误。
 
@@ -37,6 +27,7 @@ int main() {
 在函数模板的推导过程中，调用 `f<int>(10)` 模板函数会最终匹配到 `void f(T){}`。但是在匹配的过程中，同样也会去推导 `void f(typename T::foo){}`，此时 `int::foo` 是一个语法错误，但是编译器并不会报编译错误。这就是 `SFINAE`
 
 ## 代码示例二：
+
 `std::enable_if` 和 `SFINAE` 的结合使用
 
 ```cpp
